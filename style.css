@@ -6,8 +6,23 @@
 *,
 *:before,
 *:after {
-  box-sizing: inherit;
+ 
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+.background {
+  position: absolute;
+  background-color: black;
+  height: 100vh; /* Set to full viewport height */
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0; /* Ensure it's behind other elements */
+}
+
 
 html,
 body {
@@ -15,10 +30,11 @@ body {
   margin: 0;
   padding: 0;
   transition: 0.5s;
-  background: #ffffff;
+  background: black;
   cursor: default;
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
+  height: 100%; 
 }
 
 a {
@@ -36,7 +52,7 @@ ul {
 h3 {
   color: #ffb300;
   margin: 10px 0;
-  text-transform: lowercase;
+  text-transform: none;
   font-size: 1.25em;
 }
 
@@ -576,4 +592,36 @@ h6 {
 
 .resume .func .interests-items div span {
   display: block;
+}
+.website-link {
+  display: flex; /* Use flexbox for layout */
+  justify-content: center; /* Center the content horizontally */
+  align-items: center; /* Center the content vertically */
+
+  
+}
+
+.website-link a {
+  text-decoration: none; /* Remove underline from the link */
+  
+  font-size: 12px; /* Adjust font size (change as needed) */
+  display: flex; /* Use flexbox to keep the icon and text on the same line */
+  align-items: center; /* Center items vertically */
+}
+
+.website-link i {
+  margin-right: 8px; /* Add space between icon and text */
+}
+
+
+.background {
+  position: absolute;
+  height: 100vh;
+  width: 100vh;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: auto;
+  background:black;
 }
