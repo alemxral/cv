@@ -120,7 +120,7 @@ h3 {
   margin-top: 10px;
   margin-bottom: 0;
   font-size: 1.75em;
-  text-transform: lowercase;
+  
   color: #1a237e;
 }
 
@@ -128,7 +128,7 @@ h3 {
   margin-top: 10px;
   margin-bottom: 0;
   font-size: 1.5em;
-  text-transform: lowercase;
+  text-transform: none;
   color: #283593;
 }
 
@@ -234,6 +234,7 @@ h3 {
 .resume .func h3 {
   transition-duration: 0.3s;
   margin-top: 0;
+  
 }
 
 .resume .func h3 i {
@@ -249,6 +250,68 @@ h3 {
   margin-right: 8px;
   transition-duration: 0.3s;
 }
+
+
+
+
+.education-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+
+.coursework {
+  position: relative;
+  padding-left: 1.5em; /* Indentation for the "list" effect */
+  margin: 0.5em 0; /* Space between items */
+}
+
+.coursework:before {
+  content: '•'; /* Bullet point before each item */
+  position: absolute;
+  left: 0; /* Position the bullet point */
+  color: #fdd835; /* Customize bullet color */
+  font-size: 1.2em; /* Bullet size */
+}
+
+.program {
+  position: relative;
+  padding-left: 1.5em; /* Indentation for the "list" effect */
+  margin: 0.5em 0; /* Space between items */
+}
+
+.program:before {
+  content: '•'; /* Bullet point before each item */
+  position: absolute;
+  left: 0; /* Position the bullet point */
+  color: #fdd835; /* Customize bullet color */
+  font-size: 1.2em; /* Bullet size */
+}
+
+
+.highlight {
+  
+  color: #fdd835;
+  padding: 4px; /* Optional: Adds some padding around the text */
+  border-radius: 2px; /* Optional: Adds rounded corners */
+  display: inline;
+  text-decoration: solid;
+  font-weight: 500;
+ 
+}
+
+h6 {
+  font-weight: normal; /* Remove the bold effect */
+  font-size: 0.7rem; /* Adjust the font size if necessary */
+  line-height: 1.5; /* Adjust line height for better spacing */
+  margin: 0.5em 0; /* Adjust margins to fit your design */
+  color: inherit; /* Use inherited color or specify your desired color */
+}
+
+
+
+
+
 
 .resume .func .work,
 .resume .func .edu {
