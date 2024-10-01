@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
-
 * {
   outline: none;
 }
@@ -7,45 +6,37 @@
 *,
 *:before,
 *:after {
+ 
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-
-
-
 .background {
   position: absolute;
-
   background-color: black;
-  height: 100vh; /* Full viewport height */
-  width: 100vw; /* Changed to full viewport width */
+  height: 100%; /* Set to full viewport height */
+  width: 100%;
   top: 0;
+  bottom: 0;
   left: 0;
+  right: 0;
   z-index: 0; /* Ensure it's behind other elements */
-
 }
-
-
 
 
 html,
 body {
-  height: 100vh; /* Set to full height */
-  width: 100%; /* Set to full width */
   box-sizing: border-box;
-  background-color: transparent;
   margin: 0;
   padding: 0;
   transition: 0.5s;
- position: absolute;
+  background: black;
   cursor: default;
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
-  
+  height: 100%; 
 }
-
 
 a {
   text-decoration: none;
@@ -71,6 +62,7 @@ h3 {
   background: #1a237e;
   color: #ffffff;
   margin: 20px auto;
+  margin-top: 0;
   box-shadow: 10px 10px #0e1442;
   position: relative;
   display: flex;
@@ -603,6 +595,77 @@ h6 {
 .resume .func .interests-items div span {
   display: block;
 }
+
+
+
+
+
+.resume .func .language {
+  background: #283593;
+  margin: 15px 0 0;
+ 
+
+}
+
+.resume .func .language-items {
+  box-sizing: border-box;
+  padding: 0 0 15px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.resume .func .language-items div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.resume .func .language-items div:hover i {
+  transform: scale(1.2);
+}
+
+.resume .func .language-items div:hover span {
+  color: #fdd835;
+  transition-duration: 0.3s;
+}
+
+.resume .func .language-items div i {
+  font-size: 45px;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  color: #ffb300;
+  transition-duration: 0.3s;
+}
+
+.resume .func .language-items div span {
+  display: block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .website-link {
   display: flex; /* Use flexbox for layout */
   justify-content: center; /* Center the content horizontally */
@@ -622,6 +685,5 @@ h6 {
 .website-link i {
   margin-right: 8px; /* Add space between icon and text */
 }
-
 
 
