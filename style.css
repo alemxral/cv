@@ -3,6 +3,27 @@
   outline: none;
 }
 
+
+:root {
+  --black: #000000;
+  --white: var(--black);
+  --dark-green: #222831;
+  --medium-green: #393E46;
+  --light-green: #747D8C;
+  --bright-green: #95B9C7;
+  --darker-black: #111111;
+  --lighter-black: #333333;
+  --darker-green: #1A1C20;
+  --lighter-green: #464B53;
+  --brighter-green: #518397;
+  --pure-white: var(--black);
+  --off-white-1: #f8f8f8;
+  --off-white-2: #f2f2f2;
+  --off-white-3: #e6e6e6;
+  --off-white-4: #d9d9d9;
+  --off-white-5: #cccccc;
+}
+
 *,
 *:before,
 *:after {
@@ -40,7 +61,7 @@ body {
 
 a {
   text-decoration: none;
-  color: #ffffff;
+  color: var(--black);
   display: block;
   transition-duration: 0.3s;
 }
@@ -51,7 +72,7 @@ ul {
 }
 
 h3 {
-  color: #ffb300;
+  color: var(--light-green);
   margin: 10px 0;
   text-transform: none;
   font-size: 1.25em;
@@ -59,12 +80,12 @@ h3 {
 
 .resume {
   width: 960px;
-  background: #1a237e;
-  color: #ffffff;
+  background: var(--off-white-3);
+  color: var(--black);
   margin: 20px auto;
   margin-top: 0;
   margin-bottom: 0;
-  box-shadow: 10px 10px #0e1442;
+  box-shadow: 10px 10px var(--light-green);
   position: relative;
   display: flex;
 }
@@ -88,12 +109,12 @@ h3 {
 .resume .base {
   width: 30%;
   padding: 30px 15px;
-  background: #283593;
-  color: #ffffff;
+  background: var(--white);
+  color: var(--black);
 }
 
 .resume .base .profile {
-  background: #ffb300;
+  background: var(--light-green);
   padding: 30px 15px 40px 15px;
   margin: -30px -15px 45px -15px;
   position: relative;
@@ -103,7 +124,7 @@ h3 {
 .resume .base .profile::after {
   content: "";
   position: absolute;
-  background: #303f9f;
+  background: var(--black);
   width: 100%;
   height: 30px;
   bottom: -15px;
@@ -127,12 +148,12 @@ h3 {
   font-size: 100px;
   text-align: center;
   margin: auto;
-  color: #283593;
+  color: var(--white);
 }
 
 .resume .base .profile .info {
   text-align: center;
-  color: #ffffff;
+  color: var(--black);
 }
 
 .resume .base .profile .info .name {
@@ -140,7 +161,7 @@ h3 {
   margin-bottom: 0;
   font-size: 1.75em;
   
-  color: #1a237e;
+  color: var(--off-white-3);
 }
 
 .resume .base .profile .info .job {
@@ -148,7 +169,7 @@ h3 {
   margin-bottom: 0;
   font-size: 1.5em;
   text-transform: none;
-  color: #283593;
+  color: var(--white);
 }
 
 .resume .base .contact div {
@@ -156,7 +177,7 @@ h3 {
 }
 
 .resume .base .contact div a:hover {
-  color: #fdd835;
+  color: var(--brighter-green);
 }
 
 .resume .base .contact div a:hover span::after {
@@ -164,11 +185,11 @@ h3 {
 }
 
 .resume .base .contact div:hover i {
-  color: #fdd835;
+  color: var(--brighter-green);
 }
 
 .resume .base .contact div i {
-  color: #ffb300;
+  color: var(--light-green);
   width: 20px;
   height: 20px;
   font-size: 20px;
@@ -184,7 +205,7 @@ h3 {
 .resume .base .contact div span::after {
   content: "";
   position: absolute;
-  background: #fdd835;
+  background: var(--brighter-green);
   height: 1px;
   width: 0;
   bottom: 0;
@@ -203,7 +224,7 @@ h3 {
 }
 
 .resume .base .follow .box a:hover i {
-  background: #fdd835;
+  background: var(--brighter-green);
   border-radius: 5px;
   transform: rotate(45deg) scale(0.8);
 }
@@ -215,12 +236,12 @@ h3 {
 .resume .base .follow .box i {
   display: inline-block;
   font-size: 30px;
-  background: #ffb300;
+  background: var(--light-green);
   width: 60px;
   height: 60px;
   border-radius: 50%;
   line-height: 60px;
-  color: #283593;
+  color: var(--white);
   margin: 0 10px 10px 10px;
   transition-duration: 0.3s;
 }
@@ -257,8 +278,8 @@ h3 {
 }
 
 .resume .func h3 i {
-  color: #283593;
-  background: #ffb300;
+  color: var(--white);
+  background: var(--light-green);
   width: 42px;
   height: 42px;
   font-size: 20px;
@@ -289,7 +310,7 @@ h3 {
   content: '•'; /* Bullet point before each item */
   position: absolute;
   left: 0; /* Position the bullet point */
-  color: #fdd835; /* Customize bullet color */
+  color: var(--brighter-green); /* Customize bullet color */
   font-size: 1.2em; /* Bullet size */
 }
 
@@ -303,14 +324,14 @@ h3 {
   content: '•'; /* Bullet point before each item */
   position: absolute;
   left: 0; /* Position the bullet point */
-  color: #fdd835; /* Customize bullet color */
+  color: var(--brighter-green); /* Customize bullet color */
   font-size: 1.2em; /* Bullet size */
 }
 
 
 .highlight {
   
-  color: #fdd835;
+  color: var(--brighter-green);
   padding: 4px; /* Optional: Adds some padding around the text */
   border-radius: 2px; /* Optional: Adds rounded corners */
   display: inline;
@@ -320,8 +341,8 @@ h3 {
 }
 
 h6 {
-  font-weight: normal; /* Remove the bold effect */
-  font-size: 0.7rem; /* Adjust the font size if necessary */
+  font-weight: 500; /* Remove the bold effect */
+  font-size: 0.8rem; /* Adjust the font size if necessary */
   line-height: 1.5; /* Adjust line height for better spacing */
   margin: 0.5em 0; /* Adjust margins to fit your design */
   color: inherit; /* Use inherited color or specify your desired color */
@@ -340,7 +361,7 @@ h6 {
 .resume .func .work small,
 .resume .func .edu small {
   display: flex;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .resume .func .work ul li,
@@ -359,12 +380,12 @@ h6 {
 
 .resume .func .work ul li:hover span,
 .resume .func .edu ul li:hover span {
-  color: #fdd835;
+  color: var(--brighter-green);
 }
 
 @-webkit-keyframes circle {
   from {
-    box-shadow: 0 0 0 0px #fdd835;
+    box-shadow: 0 0 0 0px var(--brighter-green);
   }
   to {
     box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
@@ -373,7 +394,7 @@ h6 {
 
 @keyframes circle {
   from {
-    box-shadow: 0 0 0 0px #fdd835;
+    box-shadow: 0 0 0 0px var(--brighter-green);
   }
   to {
     box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
@@ -409,8 +430,8 @@ h6 {
 .resume .func .edu ul li::before {
   width: 7px;
   height: 7px;
-  border: 3px solid #ffffff;
-  background: #ffb300;
+  border: 3px solid var(--black);
+  background: var(--light-green);
   border-radius: 50%;
   left: 3px;
   z-index: 1;
@@ -420,7 +441,7 @@ h6 {
 .resume .func .edu ul li::after {
   width: 3px;
   height: 100%;
-  background: #ffffff;
+  background: var(--black);
   left: 5px;
   top: 0;
 }
@@ -428,12 +449,13 @@ h6 {
 .resume .func .work ul li span,
 .resume .func .edu ul li span {
   transition-duration: 0.3s;
+  font-weight: 600;
 }
 
 .resume .func .work {
   clear: both;
   width: 100%;
-  background: #283593;
+  background: var(--white);
   padding: 15px;
   margin: 15px 4% 15px 0;
 }
@@ -441,13 +463,13 @@ h6 {
 .resume .func .edu {
   clear: both;
   width: 100%;
-  background: #283593;
+  background: var(--white);
   padding: 15px;
 }
 
 .resume .func .skills-prog {
   clear: both;
-  background: #283593;
+  background: var(--white);
   padding: 15px;
 }
 
@@ -463,12 +485,12 @@ h6 {
 }
 
 .resume .func .skills-prog ul li:hover {
-  color: #fdd835;
+  color: var(--brighter-green);
 }
 
 .resume .func .skills-prog ul li:hover .skills-bar .bar {
-  background: #fdd835;
-  box-shadow: 0 0 0 1px #fdd835;
+  background: var(--brighter-green);
+  box-shadow: 0 0 0 1px var(--brighter-green);
 }
 
 .resume .func .skills-prog ul li span {
@@ -477,7 +499,7 @@ h6 {
 }
 
 .resume .func .skills-prog ul li .skills-bar {
-  background: #ffffff;
+  background: var(--black);
   height: 2px;
   width: calc(100% - 120px);
   position: relative;
@@ -488,14 +510,14 @@ h6 {
   position: absolute;
   top: -1px;
   height: 4px;
-  background: #ffb300;
-  box-shadow: 0 0 0 #ffb300;
+  background: var(--light-green);
+  box-shadow: 0 0 0 var(--light-green);
   border-radius: 5px;
 }
 
 .resume .func .skills-soft {
   clear: both;
-  background: #283593;
+  background: var(--white);
   padding: 15px;
   margin: 15px 0 0;
 }
@@ -511,7 +533,7 @@ h6 {
 }
 
 .resume .func .skills-soft ul li:hover svg .cbar {
-  stroke: #fdd835;
+  stroke: var(--brighter-green);
   stroke-width: 4px;
 }
 
@@ -528,12 +550,12 @@ h6 {
 
 .resume .func .skills-soft ul li svg circle {
   stroke-width: 1px;
-  stroke: #ffffff;
+  stroke: var(--black);
 }
 
 .resume .func .skills-soft ul li svg .cbar {
   stroke-width: 3px;
-  stroke: #ffb300;
+  stroke: var(--light-green);
   stroke-linecap: round;
 }
 
@@ -551,7 +573,7 @@ h6 {
 }
 
 .resume .func .interests {
-  background: #283593;
+  background: var(--white);
   margin: 15px 0 0;
   padding: 15px;
 }
@@ -580,7 +602,7 @@ h6 {
 }
 
 .resume .func .interests-items div:hover span {
-  color: #fdd835;
+  color: var(--brighter-green);
   transition-duration: 0.3s;
 }
 
@@ -589,7 +611,7 @@ h6 {
   width: 60px;
   height: 60px;
   line-height: 60px;
-  color: #ffb300;
+  color: var(--light-green);
   transition-duration: 0.3s;
 }
 
@@ -602,7 +624,7 @@ h6 {
 
 
 .resume .func .language {
-  background: #283593;
+  background: var(--white);
   margin: 15px 0 0;
  
 
@@ -632,7 +654,7 @@ h6 {
 }
 
 .resume .func .language-items div:hover span {
-  color: #fdd835;
+  color: var(--brighter-green);
   transition-duration: 0.3s;
 }
 
@@ -641,7 +663,7 @@ h6 {
   width: 60px;
   height: 60px;
   line-height: 60px;
-  color: #ffb300;
+  color: var(--light-green);
   transition-duration: 0.3s;
 }
 
