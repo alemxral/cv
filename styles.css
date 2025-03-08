@@ -1,0 +1,841 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+* {
+  outline: none;
+}
+
+
+
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --dark-green: #222831;
+  --medium-green: #393E46;
+  --light-green: #747D8C;
+  --bright-green: #95B9C7;
+  --darker-black: #111111;
+  --lighter-black: #333333;
+  --darker-green: #1A1C20;
+  --lighter-green: #464B53;
+  --brighter-green: #A5C9D7;
+  --pure-white: #ffffff;
+  --off-white-1: #f8f8f8;
+  --off-white-2: #f2f2f2;
+  --off-white-3: #e6e6e6;
+  --off-white-4: #d9d9d9;
+  --off-white-5: #cccccc;
+}
+
+
+*,
+*:before,
+*:after {
+ 
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.background {
+  position: absolute;
+  background-color: black;
+  height: 100%; /* var(--light-green) Set to full viewport height */
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0; /* Ensure it's behind other elements */
+}
+
+
+html,
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: 0.5s;
+  background: black;
+  cursor: default;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  height: 100%; 
+}
+
+a {
+  text-decoration: none;
+  color: var(--black);
+  display: block;
+  transition-duration: 0.3s;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+h3 {
+  color: var(--light-green);
+  margin: 10px 0;
+  text-transform: none;
+  font-size: 1.25em;
+}
+
+.resume {
+  width: 960px;
+  background: var(--off-white-3);
+  color: var(--black);
+  margin: 20px auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  box-shadow: 10px 10px var(--light-green);
+  position: relative;
+  display: flex;
+}
+
+.resume .base,
+.resume .func {
+  box-sizing: border-box;
+  float: left;
+}
+
+.resume .base > div,
+.resume .func > div {
+  padding-bottom: 10px;
+}
+
+.resume .base > div:last-of-type,
+.resume .func > div:last-of-type {
+  padding-bottom: 0;
+}
+
+.resume .base {
+  width: 30%;
+  padding: 30px 15px;
+  background: var(--white);
+  color: var(--black);
+}
+
+.resume .base .profile {
+  background: var(--light-green);
+  padding: 30px 15px 40px 15px;
+  margin: -30px -15px 45px -15px;
+  position: relative;
+  z-index: 2;
+}
+
+.resume .base .profile::after {
+  content: "";
+  position: absolute;
+  background: var(--black);
+  width: 100%;
+  height: 30px;
+  bottom: -15px;
+  left: 0;
+  transform: skewY(-5deg);
+  z-index: -1;
+}
+
+.resume .base .profile .photo img {
+  width: 100%;
+  border-radius: 50%;
+}
+
+.resume .base .profile .photo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resume .base .profile .fa-rocket {
+  font-size: 100px;
+  text-align: center;
+  margin: auto;
+  color: var(--white);
+}
+
+.resume .base .profile .info {
+  text-align: center;
+  color: var(--black);
+}
+
+.resume .base .profile .info .name {
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 1.75em;
+  
+  color: var(--off-white-3);
+}
+
+.resume .base .profile .info .job {
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 1.5em;
+  text-transform: none;
+  color: var(--white);
+}
+
+.resume .base .contact div {
+  line-height: 24px;
+}
+
+.resume .base .contact div a:hover {
+  color: var(--bright-green);
+}
+
+.resume .base .contact div a:hover span::after {
+  width: 100%;
+}
+
+.resume .base .contact div:hover i {
+  color: var(--bright-green);
+}
+
+.resume .base .contact div i {
+  color: var(--black);
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  text-align: center;
+  margin-right: 15px;
+  transition-duration: 0.3s;
+}
+
+.resume .base .contact div span {
+  position: relative;
+}
+
+.resume .base .contact div span::after {
+  content: "";
+  position: absolute;
+  background: var(--black);
+  height: 1px;
+  width: 0;
+  bottom: 0;
+  left: 0;
+  transition-duration: 0.3s;
+}
+
+.resume .base .follow .box {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.resume .base .follow .box a {
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+
+.resume .base .follow .box a:hover i {
+  background: var(--bright-green);
+  border-radius: 5px;
+  transform: rotate(45deg) scale(0.8);
+}
+
+.resume .base .follow .box a:hover i::before {
+  transform: rotate(-45deg) scale(1.5);
+}
+
+.resume .base .follow .box i {
+  display: inline-block;
+  font-size: 30px;
+  background: var(--light-green);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  line-height: 60px;
+  color: var(--white);
+  margin: 0 10px 10px 10px;
+  transition-duration: 0.3s;
+}
+
+.resume .base .follow .box i::before {
+  transition-duration: 0.3s;
+}
+
+.resume .base .follow .box i.fa::before {
+  display: block;
+}
+
+.resume .func {
+  width: 100%;
+  padding: 30px;
+}
+
+.resume .func:hover > div {
+  transition-duration: 0.5s;
+}
+
+.resume .func:hover > div:hover h3 i {
+  transform: scale(1.25);
+}
+
+.resume .func:hover > div:not(:hover) {
+  opacity: 0.5;
+}
+
+.resume .func h3 {
+  transition-duration: 0.3s;
+  margin-top: 0;
+  
+}
+
+.resume .func h3 i {
+  color: var(--white);
+  background: var(--light-green);
+  width: 42px;
+  height: 42px;
+  font-size: 20px;
+  line-height: 42px;
+  border-radius: 50%;
+  text-align: center;
+  vertical-align: middle;
+  margin-right: 8px;
+  transition-duration: 0.3s;
+}
+
+
+
+
+.education-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+
+.coursework {
+  position: relative;
+  padding-left: 1.5em; /* Indentation for the "list" effect */
+  margin: 0.5em 0; /* Space between items */
+  opacity: 1;
+  color: (--black);
+
+}
+
+.coursework:before {
+  content: '•'; /* Bullet point before each item */
+  position: absolute;
+  left: 0; /* Position the bullet point */
+  color: var(--bright-green); /* Customize bullet color */
+  font-size: 1.2em; /* Bullet size */
+}
+
+.program {
+  position: relative;
+  padding-left: 1.5em; /* Indentation for the "list" effect */
+  margin: 0.5em 0; /* Space between items */
+}
+
+.program:before {
+  content: '•'; /* Bullet point before each item */
+  position: absolute;
+  left: 0; /* Position the bullet point */
+  color: var(--bright-green); /* Customize bullet color */
+  font-size: 1.2em; /* Bullet size */
+}
+
+
+.highlight {
+  
+  color: var(--bright-green);
+  padding: 4px; /* Optional: Adds some padding around the text */
+  border-radius: 2px; /* Optional: Adds rounded corners */
+  display: inline;
+  text-decoration: solid;
+  font-weight: 500;
+ 
+}
+
+h6 {
+  font-weight: normal; /* Remove the bold effect */
+  opacity: 1;
+  font-size: 0.7rem; /* Adjust the font size if necessary */
+  line-height: 1.5; /* Adjust line height for better spacing */
+  margin: 0.5em 0; /* Adjust margins to fit your design */
+  color: #000000; /* Use a specific color value for black */
+}
+
+
+
+
+.resume .func .work,
+.resume .func .edu {
+  float: left;
+}
+
+.resume .func .work small,
+.resume .func .edu small {
+  display: flex;
+  opacity: 1;
+}
+
+.resume .func .work ul li,
+.resume .func .edu ul li {
+  position: relative;
+  margin-left: 15px;
+  padding-left: 25px;
+  padding-bottom: 15px;
+}
+
+.resume .func .work ul li:hover::before,
+.resume .func .edu ul li:hover::before {
+  -webkit-animation: circle 1.2s infinite;
+          animation: circle 1.2s infinite;
+}
+
+.resume .func .work ul li:hover span,
+.resume .func .edu ul li:hover span {
+  color: var(--bright-green);
+}
+
+@-webkit-keyframes circle {
+  from {
+    box-shadow: 0 0 0 0px var(--bright-green);
+  }
+  to {
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+  }
+}
+
+@keyframes circle {
+  from {
+    box-shadow: 0 0 0 0px var(--bright-green);
+  }
+  to {
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+  }
+}
+.resume .func .work ul li:first-of-type::before,
+.resume .func .edu ul li:first-of-type::before {
+  width: 10px;
+  height: 10px;
+  left: 1px;
+}
+
+.resume .func .work ul li:last-of-type,
+.resume .func .edu ul li:last-of-type {
+  padding-bottom: 3px;
+}
+
+.resume .func .work ul li:last-of-type::after,
+.resume .func .edu ul li:last-of-type::after {
+  border-radius: 1.5px;
+}
+
+.resume .func .work ul li::before,
+.resume .func .work ul li::after,
+.resume .func .edu ul li::before,
+.resume .func .edu ul li::after {
+  content: "";
+  display: block;
+  position: absolute;
+}
+
+.resume .func .work ul li::before,
+.resume .func .edu ul li::before {
+  width: 7px;
+  height: 7px;
+  border: 3px solid var(--black);
+  background: var(--light-green);
+  border-radius: 50%;
+  left: 3px;
+  z-index: 1;
+}
+
+.resume .func .work ul li::after,
+.resume .func .edu ul li::after {
+  width: 3px;
+  height: 100%;
+  background: var(--black);
+  left: 5px;
+  top: 0;
+}
+
+.resume .func .work ul li span,
+.resume .func .edu ul li span {
+  transition-duration: 0.3s;
+  font-weight:bold ;
+}
+
+.resume .func .work ul li h6,
+.resume .func .edu ul li h6 {
+  transition-duration: 0.3s;
+  font-weight:normal ;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: small;
+
+}
+
+.resume .func .work {
+  clear: both;
+  width: 100%;
+  background: var(--white);
+  padding: 15px;
+  margin: 15px 4% 15px 0;
+}
+
+.resume .func .edu {
+  clear: both;
+  width: 100%;
+  background: var(--white);
+  padding: 15px;
+}
+
+.resume .func .skills-prog {
+  clear: both;
+  background: var(--white);
+  padding: 15px;
+}
+
+.resume .func .skills-prog ul {
+  margin-left: 15px;
+}
+
+.resume .func .skills-prog ul li {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  transition-duration: 0.3s;
+}
+
+.resume .func .skills-prog ul li:hover {
+  color: var(--bright-green);
+}
+
+.resume .func .skills-prog ul li:hover .skills-bar .bar {
+  background: var(--bright-green);
+  box-shadow: 0 0 0 1px var(--bright-green);
+}
+
+.resume .func .skills-prog ul li span {
+  display: block;
+  width: 120px;
+}
+
+.resume .func .skills-prog ul li .skills-bar {
+  background: var(--black);
+  height: 2px;
+  width: calc(100% - 120px);
+  position: relative;
+  border-radius: 2px;
+}
+
+.resume .func .skills-prog ul li .skills-bar .bar {
+  position: absolute;
+  top: -1px;
+  height: 4px;
+  background: var(--light-green);
+  box-shadow: 0 0 0 var(--light-green);
+  border-radius: 5px;
+}
+
+.resume .func .skills-soft {
+  clear: both;
+  background: var(--white);
+  padding: 15px;
+  margin: 15px 0 0;
+}
+
+.resume .func .skills-soft ul {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.resume .func .skills-soft ul li {
+  position: relative;
+}
+
+.resume .func .skills-soft ul li:hover svg .cbar {
+  stroke: var(--bright-green);
+  stroke-width: 4px;
+}
+
+.resume .func .skills-soft ul li:hover span,
+.resume .func .skills-soft ul li:hover small {
+  transform: scale(1.2);
+}
+
+.resume .func .skills-soft ul li svg {
+  width: 95%;
+  fill: transparent;
+  transform: rotate(-90deg);
+}
+
+.resume .func .skills-soft ul li svg circle {
+  stroke-width: 1px;
+  stroke: var(--black);
+}
+
+.resume .func .skills-soft ul li svg .cbar {
+  stroke-width: 3px;
+  stroke: var(--light-green);
+  stroke-linecap: round;
+}
+
+.resume .func .skills-soft ul li span,
+.resume .func .skills-soft ul li small {
+  position: absolute;
+  display: block;
+  width: 100%;
+  top: 52%;
+  transition-duration: 0.3s;
+}
+
+.resume .func .skills-soft ul li span {
+  top: 40%;
+}
+
+.resume .func .interests {
+  background: var(--white);
+  margin: 15px 0 0;
+  padding: 15px;
+}
+
+.resume .func .interests-items {
+  box-sizing: border-box;
+  padding: 0 0 15px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+}
+
+.resume .func .interests-items div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.resume .func .interests-items div:hover i {
+  transform: scale(1.2);
+}
+
+.resume .func .interests-items div:hover span {
+  color: var(--bright-green);
+  transition-duration: 0.3s;
+}
+
+.resume .func .interests-items div i {
+  font-size: 45px;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  color: var(--light-green);
+  transition-duration: 0.3s;
+}
+
+.resume .func .interests-items div span {
+  display: block;
+}
+
+
+
+
+
+
+.resume .func .language {
+  background: var(--white);
+  margin: 15px 0 0;
+ 
+
+}
+
+.resume .func .language-items {
+  box-sizing: border-box;
+  padding: 0 0 15px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+
+  justify-content: space-around;
+ 
+}
+
+.resume .func .language-items div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.resume .func .language-items div:hover i {
+  transform: scale(1.2);
+}
+
+.resume .func .language-items div:hover span {
+  color: var(--bright-green);
+  transition-duration: 0.3s;
+}
+
+.resume .func .language-items div i {
+  font-size: 45px;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  color: var(--light-green);
+  transition-duration: 0.3s;
+}
+
+.resume .func .language-items div span {
+  display: block;
+}
+
+
+#language-items {
+  display: flex; /* Align the items horizontally */
+  flex-wrap: wrap; /* Allow wrapping if necessary */
+  gap: 10px; /* Reduce space between items */
+  margin: 0; /* Remove any default margin */
+}
+
+.language {
+  display: flex;
+  align-items: center; /* Vertically align the flag and text */
+  margin: 0; /* Remove any default margin */
+}
+
+
+
+
+
+.email {
+  display: flex; /* Use flexbox for layout */
+  justify-content: start; /* Center the content horizontally */
+  align-items: start; /* Center the content vertically */
+
+  
+}
+
+.email a {
+  text-decoration: none; /* Remove underline from the link */
+  
+  font-size: 12px; /* Adjust font size (change as needed) */
+  display: flex; /* Use flexbox to keep the icon and text on the same line */
+  align-items: self-start; /* Center items vertically */
+}
+
+.email i {
+  margin-right: 8px; /* Add space between icon and text */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.website-link {
+  display: flex; /* Use flexbox for layout */
+  justify-content: center; /* Center the content horizontally */
+  align-items: center; /* Center the content vertically */
+
+  
+}
+
+.website-link a {
+  text-decoration: none; /* Remove underline from the link */
+  
+  font-size: 12px; /* Adjust font size (change as needed) */
+  display: flex; /* Use flexbox to keep the icon and text on the same line */
+  align-items: center; /* Center items vertically */
+}
+
+.website-link i {
+  margin-right: 8px; /* Add space between icon and text */
+}
+
+/* START: TEMPLATE */
+:root {
+  --blue: #26bbf0;
+  --green: #c2d5a0;
+  --red: #cf6a6d;
+  --yellow: #ffbc0d;
+  
+  --black: #343536;
+  --black-2: #424950;
+  --grey: #89949b;
+  --grey-2: #9aa8b1;
+  --light-grey: #c4c9cd;
+  --light-grey-2: #dbdfe1;
+  --white: #f3f4f5;
+}
+
+html, body {
+ 
+  overflow: visible;
+  background: mix(#3f3251, #002025, 70%);
+}
+
+.vertical-centered-box {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+ 
+}
+.vertical-centered-box::after {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em;
+}
+.vertical-centered-box .content {
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: middle;
+ 
+ 
+}
+
+/* Global transition for all elements */
+* {
+  transition: all .3s;
+}
+/* END: TEMPLATE */
+
+
+
+#particles-background,
+#particles-foreground {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  transform: scale3d(1, 1, 1);
+}
+
+#particles-background {
+  background: mix(#7854aa, #2aa9bd, 70%);
+  background-image: linear-gradient(45deg, #4f386e 2%, #268291 100%);
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fade {
+  0% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
