@@ -88,6 +88,7 @@
 /* PROJECT ITEM */
 .project-item {
   background: #fff;
+  padding: 0px;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -100,12 +101,16 @@
 /* PROJECT IMAGE with adaptive ratio */
 .project-img {
   position: relative;
+  padding: 0px;
+  margin: 0px;
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
 }
 .project-img img {
   display: block;
+  padding: 0px;
+  margin: 0px;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -113,6 +118,8 @@
   margin: 0;
   padding: 0;
   transition: transform 0.3s ease;
+
+  z-index: 20;
 }
 .project-eye-link:hover .project-img img {
   transform: scale(1.05);
