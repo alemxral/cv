@@ -871,3 +871,9 @@ html, body {
     transform: translateY(0);
   }
 }
+
+
+/* Projects section hidden by default */
+.projects {
+  display: none;
+}
