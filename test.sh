@@ -1,98 +1,144 @@
 #!/bin/bash
 
-echo "===== Born2beRoot VM Automated Setup Test ====="
+LOGFILE="/var/log/test.log"
+CHECKLIST=()
 
-echo ""
-echo "[1] Checking for LVM and encrypted partitions:"
+log() {
+  echo "$1" >> "$LOGFILE"
+}
+
+check() {
+  local description="$1"
+  local result="$2"
+  local extra="$3"
+  if [ "$result" = "OK" ]; then
+    CHECKLIST+=("[PASS] $description")
+    log "[PASS] $description $extra"
+  else
+    CHECKLIST+=("[FAIL] $description")
+    log "[FAIL] $description $extra"
+  fi
+}
+
+echo "===== Born2beRoot VM Automated Setup Test =====" > "$LOGFILE"
+log "Date: $(date)"
+log "User: $(whoami)"
+log ""
+
+# 1. LVM and encrypted partitions
 lvm_count=$(lsblk -o TYPE | grep -c lvm)
 crypt_count=$(lsblk -o TYPE | grep -c crypt)
-echo "  - LVM volumes found: $lvm_count"
-echo "  - Encrypted partitions found: $crypt_count"
+desc="At least 2 LVM and 2 encrypted partitions exist"
 if [ "$lvm_count" -ge 2 ] && [ "$crypt_count" -ge 2 ]; then
-  echo "  => OK: At least 2 encrypted LVM partitions found."
+  check "$desc" OK "LVM=$lvm_count, crypt=$crypt_count"
 else
-  echo "  => ERROR: Need at least 2 encrypted LVM partitions."
+  check "$desc" FAIL "LVM=$lvm_count, crypt=$crypt_count"
 fi
 
-echo ""
-echo "[2] Hostname check:"
-hostnamectl | grep hostname
-if [[ "$(hostname)" =~ 42$ ]]; then
-  echo "  => OK: Hostname ends with 42."
+# 2. Hostname
+hostname_val=$(hostname)
+desc="Hostname ends with 42"
+if [[ "$hostname_val" =~ 42$ ]]; then
+  check "$desc" OK "hostname=$hostname_val"
 else
-  echo "  => ERROR: Hostname does not end with 42."
+  check "$desc" FAIL "hostname=$hostname_val"
 fi
 
-echo ""
-echo "[3] UFW firewall (Debian):"
-ufw_status=$(ufw status | grep Status)
-echo "  - $ufw_status"
-open_ports=$(ufw status | grep "4242" | grep ALLOW)
+# 3. UFW firewall
+ufw_status=$(ufw status | grep Status 2>&1)
+open_ports=$(ufw status | grep "4242" | grep ALLOW 2>&1)
+desc="UFW active and port 4242 open"
 if [[ "$ufw_status" == *"active"* ]] && [[ "$open_ports" != "" ]]; then
-  echo "  => OK: UFW active and port 4242 open."
+  check "$desc" OK "$ufw_status, port 4242 open"
 else
-  echo "  => ERROR: UFW not active or port 4242 not open."
+  check "$desc" FAIL "$ufw_status, port 4242 not open"
 fi
 
-echo ""
-echo "[4] SSH config:"
-sshd_port=$(grep "^Port " /etc/ssh/sshd_config | awk '{print $2}')
-permit_root=$(grep "^PermitRootLogin " /etc/ssh/sshd_config | awk '{print $2}')
-echo "  - SSH Port: $sshd_port"
-echo "  - PermitRootLogin: $permit_root"
+# 4. SSH config
+sshd_port=$(grep "^Port " /etc/ssh/sshd_config | awk '{print $2}' 2>&1)
+permit_root=$(grep "^PermitRootLogin " /etc/ssh/sshd_config | awk '{print $2}' 2>&1)
+desc="SSH runs on port 4242 and root login disabled"
 if [ "$sshd_port" = "4242" ] && [[ "$permit_root" =~ "no" ]]; then
-  echo "  => OK: SSH runs on 4242 and root login is disabled."
+  check "$desc" OK "Port=$sshd_port, PermitRootLogin=$permit_root"
 else
-  echo "  => ERROR: SSH port/root login not correctly configured."
+  check "$desc" FAIL "Port=$sshd_port, PermitRootLogin=$permit_root"
 fi
 
-echo ""
-echo "[5] User and group checks:"
-login42=$(whoami)
+# 5. User and groups
+login42="$USER"
 user_check=$(getent passwd "$login42")
 group_check=$(groups "$login42" | grep user42)
 sudo_check=$(groups "$login42" | grep sudo)
-echo "  - User '$login42' exists: $( [ -n "$user_check" ] && echo OK || echo ERROR )"
-echo "  - Belongs to user42 group: $( [ -n "$group_check" ] && echo OK || echo ERROR )"
-echo "  - Belongs to sudo group: $( [ -n "$sudo_check" ] && echo OK || echo ERROR )"
+desc="User '$login42' exists"
+check "$desc" $( [ -n "$user_check" ] && echo OK || echo FAIL ) "user_check=$user_check"
+desc="User belongs to user42 group"
+check "$desc" $( [ -n "$group_check" ] && echo OK || echo FAIL ) "group_check=$group_check"
+desc="User belongs to sudo group"
+check "$desc" $( [ -n "$sudo_check" ] && echo OK || echo FAIL ) "sudo_check=$sudo_check"
 
-echo ""
-echo "[6] Password Policy:"
-echo "  - Checking /etc/login.defs and /etc/pam.d/common-password..."
-grep "PASS_MAX_DAYS" /etc/login.defs
-grep "PASS_MIN_DAYS" /etc/login.defs
-grep "PASS_WARN_AGE" /etc/login.defs
-grep pam_pwquality /etc/pam.d/common-password
-pwquality=$(grep "minlen" /etc/security/pwquality.conf)
-echo "  - pwquality.conf: $pwquality"
-echo "  - Check for password expiration, length, complexity in above output."
+# 6. Password Policy
+desc="Password expiration set to 30 days"
+max_days=$(grep "PASS_MAX_DAYS" /etc/login.defs | awk '{print $2}')
+check "$desc" $( [ "$max_days" -eq 30 ] && echo OK || echo FAIL ) "PASS_MAX_DAYS=$max_days"
 
-echo ""
-echo "[7] Sudo configuration:"
-echo "  - Checking /etc/sudoers and /etc/sudoers.d/*"
-sudo_attempts=$(grep "passwd_tries" /etc/sudoers)
+desc="Password minimum change interval set to 2 days"
+min_days=$(grep "PASS_MIN_DAYS" /etc/login.defs | awk '{print $2}')
+check "$desc" $( [ "$min_days" -eq 2 ] && echo OK || echo FAIL ) "PASS_MIN_DAYS=$min_days"
+
+desc="Password expiration warning set to 7 days"
+warn_age=$(grep "PASS_WARN_AGE" /etc/login.defs | awk '{print $2}')
+check "$desc" $( [ "$warn_age" -eq 7 ] && echo OK || echo FAIL ) "PASS_WARN_AGE=$warn_age"
+
+desc="Password minlen at least 10"
+minlen=$(grep "minlen" /etc/security/pwquality.conf | awk '{print $3}')
+check "$desc" $( [ "$minlen" -ge 10 ] && echo OK || echo FAIL ) "minlen=$minlen"
+
+desc="Password contains uppercase, lowercase, digit, no more than 3 consecutive identical, not username"
+pwquality_conf=$(cat /etc/security/pwquality.conf 2>&1)
+rules_ok=$(echo "$pwquality_conf" | grep -E "ucredit|lcredit|dcredit|maxrepeat|usercheck")
+check "$desc" $( [ -n "$rules_ok" ] && echo OK || echo FAIL ) "pwquality.conf=$pwquality_conf"
+
+# 7. Sudo configuration
+desc="Sudo limited to 3 authentication attempts"
+sudo_attempts=$(grep "passwd_tries" /etc/sudoers | awk '{print $2}')
+check "$desc" $( [ "$sudo_attempts" -eq 3 ] && echo OK || echo FAIL ) "passwd_tries=$sudo_attempts"
+
+desc="Custom bad password message for sudo"
 sudo_message=$(grep "badpass_message" /etc/sudoers)
-sudo_log=$(grep "logfile" /etc/sudoers)
+check "$desc" $( [ -n "$sudo_message" ] && echo OK || echo FAIL ) "badpass_message=$sudo_message"
+
+desc="Sudo logs archived in /var/log/sudo/"
+sudo_log=$(grep "logfile" /etc/sudoers | grep "/var/log/sudo/")
+check "$desc" $( [ -n "$sudo_log" ] && echo OK || echo FAIL ) "logfile=$sudo_log"
+
+desc="Sudo TTY mode enabled"
 sudo_tty=$(grep "requiretty" /etc/sudoers)
+check "$desc" $( [ -n "$sudo_tty" ] && echo OK || echo FAIL ) "requiretty=$sudo_tty"
+
+desc="Sudo secure_path restricted"
 sudo_secure_path=$(grep "secure_path" /etc/sudoers)
-echo "  - passwd_tries: $sudo_attempts"
-echo "  - badpass_message: $sudo_message"
-echo "  - logfile: $sudo_log"
-echo "  - requiretty: $sudo_tty"
-echo "  - secure_path: $sudo_secure_path"
+check "$desc" $( [ -n "$sudo_secure_path" ] && echo OK || echo FAIL ) "secure_path=$sudo_secure_path"
 
-echo ""
-echo "[8] Monitoring script setup:"
-crontab_monitor=$(crontab -l | grep monitoring.sh)
-systemd_monitor=$(systemctl list-unit-files | grep monitoring-banner)
+# 8. Monitoring script
+desc="monitoring.sh present in /usr/local/bin"
+script_path="/usr/local/bin/monitoring.sh"
+check "$desc" $( [ -f "$script_path" ] && echo OK || echo FAIL ) "$script_path"
+
+desc="monitoring.sh in crontab"
+crontab_monitor=$(crontab -l 2>/dev/null | grep monitoring.sh)
+check "$desc" $( [ -n "$crontab_monitor" ] && echo OK || echo FAIL ) "crontab_monitor=$crontab_monitor"
+
+desc="monitoring-banner systemd service enabled"
+systemd_monitor=$(systemctl list-unit-files | grep monitoring-banner | grep enabled)
+check "$desc" $( [ -n "$systemd_monitor" ] && echo OK || echo FAIL ) "systemd_monitor=$systemd_monitor"
+
+desc="monitoring.sh runs without errors"
 script_test=$(bash /usr/local/bin/monitoring.sh 2>&1 | grep -i error)
-echo "  - monitoring.sh in crontab: $( [ -n "$crontab_monitor" ] && echo OK || echo ERROR )"
-echo "  - monitoring-banner systemd service: $( [ -n "$systemd_monitor" ] && echo OK || echo ERROR )"
-if [ -z "$script_test" ]; then
-  echo "  - monitoring.sh runs with no errors: OK"
-else
-  echo "  - monitoring.sh error output: $script_test"
-fi
+check "$desc" $( [ -z "$script_test" ] && echo OK || echo FAIL ) "script_test=$script_test"
 
-echo ""
-echo "===== End of Automated Test ====="
+# Print checklist to console
+echo "===== Born2beRoot VM Test Checklist ====="
+for item in "${CHECKLIST[@]}"; do
+  echo "$item"
+done
+echo "Detailed logs: $LOGFILE"
