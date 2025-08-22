@@ -164,6 +164,42 @@ EOF
 systemctl daemon-reload
 systemctl enable monitoring-banner.service
 
+
+#!/bin/bash
+
+# --- Password Policy: /etc/pam.d/common-password ---
+COMMON_PW_FILE="/etc/pam.d/common-password"
+
+# Add all required options to the pam_unix.so line (if not present)
+REQUIRED_OPTS="minlen=10 ucredit=-1 lcredit=-1 dcredit=-1 maxrepeat=3 difok=7 enforce_for_root reject_username"
+
+if grep -q "pam_unix.so" "$COMMON_PW_FILE"; then
+    # Remove any previous options to avoid duplication
+    sed -i '/pam_unix.so/ s/minlen=[0-9]\+//g; s/ucredit=-[0-9]\+//g; s/lcredit=-[0-9]\+//g; s/dcredit=-[0-9]\+//g; s/maxrepeat=[0-9]\+//g; s/difok=[0-9]\+//g; s/enforce_for_root//g; s/reject_username//g' "$COMMON_PW_FILE"
+    # Add required options
+    sed -i '/pam_unix.so/ s/$/ '"$REQUIRED_OPTS"'/' "$COMMON_PW_FILE"
+    echo "Password policy fixed in $COMMON_PW_FILE"
+else
+    echo "pam_unix.so not found in $COMMON_PW_FILE! Please check the file."
+fi
+
+# --- Crontab: Add monitoring.sh every 10 minutes ---
+CRONTAB_LINE="*/10 * * * * /path/to/monitoring.sh"
+CRONTAB_TMP=$(mktemp)
+
+crontab -l 2>/dev/null > "$CRONTAB_TMP"
+if ! grep -q "monitoring.sh" "$CRONTAB_TMP"; then
+    echo "$CRONTAB_LINE" >> "$CRONTAB_TMP"
+    crontab "$CRONTAB_TMP"
+    echo "Crontab entry added: $CRONTAB_LINE"
+else
+    echo "monitoring.sh entry already exists in crontab."
+fi
+
+rm "$CRONTAB_TMP"
+
+echo "All fixes applied! You may now re-run your test script."
+
 # 11. Cron job for monitoring (every 10 min)
 (crontab -l 2>/dev/null; echo "*/10 * * * * /usr/local/bin/monitoring.sh") | crontab -
 
