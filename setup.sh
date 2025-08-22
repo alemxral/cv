@@ -3,7 +3,7 @@
 # Run as root!
 
 # ---- CONFIG ----
-LOGIN="jeshopenhauer"     # Set your login
+LOGIN="lhuang"     # Set your login
 HOSTNAME="${LOGIN}42"     # Hostname pattern
 SSH_PORT=4242
 USER_GROUP="user42"
