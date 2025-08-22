@@ -2,11 +2,15 @@
 # Born2beRoot automated setup script for Debian
 # Run as root!
 
+set -e
+
 # ---- CONFIG ----
 LOGIN="lhuang"     # Set your login
-HOSTNAME="${LOGIN}42"     # Hostname pattern
+HOSTNAME="${LOGIN}42"
 SSH_PORT=4242
 USER_GROUP="user42"
+MONITOR_SCRIPT="/usr/local/bin/monitoring.sh"
+ROOT_PARTITION="/dev/sda7" # Change if your root isn't sda7!
 # ----------------
 
 echo "--= Born2beRoot Setup for Debian =--"
@@ -35,7 +39,7 @@ if ! grep -q "^PermitRootLogin no" $sshd_cfg; then
 fi
 systemctl restart ssh
 
-# 4. AppArmor
+# 4. AppArmor & basic packages
 apt-get update
 apt-get install -y apparmor libpam-pwquality ufw sudo
 systemctl enable --now apparmor
@@ -45,18 +49,25 @@ ufw allow ${SSH_PORT}/tcp
 ufw default deny incoming
 ufw --force enable
 
-# 6. Password Policy
+# 6. Password Policy (login.defs)
 LOGINDEFS="/etc/login.defs"
 sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS   30/' $LOGINDEFS
 sed -i 's/^PASS_MIN_DAYS.*/PASS_MIN_DAYS   2/' $LOGINDEFS
 sed -i 's/^PASS_WARN_AGE.*/PASS_WARN_AGE   7/' $LOGINDEFS
 
-PAMFILE="/etc/pam.d/common-password"
-if ! grep -q pam_pwquality $PAMFILE; then
-    echo "password requisite pam_pwquality.so retry=3 minlen=10 ucredit=-1 lcredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7" >> $PAMFILE
+# 7. Password Policy (pam.d/common-password)
+COMMON_PW_FILE="/etc/pam.d/common-password"
+REQUIRED_OPTS="minlen=10 ucredit=-1 lcredit=-1 dcredit=-1 maxrepeat=3 difok=7 enforce_for_root reject_username"
+if grep -q "pam_unix.so" "$COMMON_PW_FILE"; then
+    # Remove previous options to avoid duplication
+    sed -i '/pam_unix.so/ s/minlen=[0-9]\+//g; s/ucredit=-[0-9]\+//g; s/lcredit=-[0-9]\+//g; s/dcredit=-[0-9]\+//g; s/maxrepeat=[0-9]\+//g; s/difok=[0-9]\+//g; s/enforce_for_root//g; s/reject_username//g' "$COMMON_PW_FILE"
+    sed -i '/pam_unix.so/ s/$/ '"$REQUIRED_OPTS"'/' "$COMMON_PW_FILE"
+    echo "Password policy fixed in $COMMON_PW_FILE"
+else
+    echo "pam_unix.so not found in $COMMON_PW_FILE! Please check the file."
 fi
 
-# 7. Sudo settings
+# 8. Sudo settings
 SUDOERS="/etc/sudoers"
 for line in \
     "Defaults        passwd_tries=3" \
@@ -69,13 +80,13 @@ do
     grep -qF "$line" $SUDOERS || echo "$line" >> $SUDOERS
 done
 
-# 8. Sudo logging folder
+# 9. Sudo logging folder
 mkdir -p /var/log/sudo
 touch /var/log/sudo/sudo.log
 chmod 600 /var/log/sudo/sudo.log
 
-# 9. monitoring.sh setup
-cat > /usr/local/bin/monitoring.sh <<'EOF'
+# 10. monitoring.sh setup
+cat > "$MONITOR_SCRIPT" <<'EOF'
 #!/bin/bash
 get_arch() { echo "Architecture: $(uname -m)"; echo "Kernel version: $(uname -r)"; }
 get_cpus() {
@@ -146,16 +157,23 @@ main() {
 }
 main
 EOF
-chmod +x /usr/local/bin/monitoring.sh
+chmod +x "$MONITOR_SCRIPT"
 
-# 10. Systemd service for monitoring
+# 11. Remove duplicate monitoring.sh entries in crontab, add only one
+CRON_TMP=$(mktemp)
+crontab -l 2>/dev/null | grep -v "$MONITOR_SCRIPT" > "$CRON_TMP"
+echo "*/10 * * * * $MONITOR_SCRIPT" >> "$CRON_TMP"
+crontab "$CRON_TMP"
+rm "$CRON_TMP"
+
+# 12. Systemd service for monitoring
 cat > /etc/systemd/system/monitoring-banner.service <<EOF
 [Unit]
 Description=System Monitoring Banner
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/monitoring.sh
+ExecStart=$MONITOR_SCRIPT
 
 [Install]
 WantedBy=multi-user.target
@@ -164,44 +182,13 @@ EOF
 systemctl daemon-reload
 systemctl enable monitoring-banner.service
 
-
-#!/bin/bash
-
-# --- Password Policy: /etc/pam.d/common-password ---
-COMMON_PW_FILE="/etc/pam.d/common-password"
-
-# Add all required options to the pam_unix.so line (if not present)
-REQUIRED_OPTS="minlen=10 ucredit=-1 lcredit=-1 dcredit=-1 maxrepeat=3 difok=7 enforce_for_root reject_username"
-
-if grep -q "pam_unix.so" "$COMMON_PW_FILE"; then
-    # Remove any previous options to avoid duplication
-    sed -i '/pam_unix.so/ s/minlen=[0-9]\+//g; s/ucredit=-[0-9]\+//g; s/lcredit=-[0-9]\+//g; s/dcredit=-[0-9]\+//g; s/maxrepeat=[0-9]\+//g; s/difok=[0-9]\+//g; s/enforce_for_root//g; s/reject_username//g' "$COMMON_PW_FILE"
-    # Add required options
-    sed -i '/pam_unix.so/ s/$/ '"$REQUIRED_OPTS"'/' "$COMMON_PW_FILE"
-    echo "Password policy fixed in $COMMON_PW_FILE"
+# 13. Label root partition (for lsblk | grep root test)
+if [ -b "$ROOT_PARTITION" ]; then
+    e2label "$ROOT_PARTITION" root
+    echo "Labeled $ROOT_PARTITION as root"
 else
-    echo "pam_unix.so not found in $COMMON_PW_FILE! Please check the file."
+    echo "Root partition device $ROOT_PARTITION not found! Please check."
 fi
-
-# --- Crontab: Add monitoring.sh every 10 minutes ---
-CRONTAB_LINE="*/10 * * * * /path/to/monitoring.sh"
-CRONTAB_TMP=$(mktemp)
-
-crontab -l 2>/dev/null > "$CRONTAB_TMP"
-if ! grep -q "monitoring.sh" "$CRONTAB_TMP"; then
-    echo "$CRONTAB_LINE" >> "$CRONTAB_TMP"
-    crontab "$CRONTAB_TMP"
-    echo "Crontab entry added: $CRONTAB_LINE"
-else
-    echo "monitoring.sh entry already exists in crontab."
-fi
-
-rm "$CRONTAB_TMP"
-
-echo "All fixes applied! You may now re-run your test script."
-
-# 11. Cron job for monitoring (every 10 min)
-(crontab -l 2>/dev/null; echo "*/10 * * * * /usr/local/bin/monitoring.sh") | crontab -
 
 echo "== Basic Debian setup done. =="
 echo "Manual steps remaining:"
