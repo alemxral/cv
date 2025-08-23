@@ -1,5 +1,5 @@
 #!/bin/bash
-# setup-monitoring-service.sh
+# AutoFixTest.sh
 # Run this script with sudo
 
 SCRIPT_PATH="/usr/local/bin/monitoring.sh"
