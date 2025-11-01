@@ -79,7 +79,10 @@ h3 {
 }
 
 .resume {
-  width: 960px;
+  /* Make the resume container fluid but constrained to a comfortable max width
+     so content (like the skills grid) has more room without overflowing. */
+  max-width: 1200px;
+  width: calc(100% - 40px);
   background: var(--off-white-3);
   color: var(--black);
   margin: 20px auto;
@@ -88,6 +91,7 @@ h3 {
   box-shadow: 10px 10px var(--light-green);
   position: relative;
   display: flex;
+  box-sizing: border-box;
 }
 
 .resume .base,
@@ -111,6 +115,9 @@ h3 {
   padding: 30px 15px;
   background: var(--white);
   color: var(--black);
+  /* prevent the left column from collapsing and causing layout overflow */
+  min-width: 220px;
+  box-sizing: border-box;
 }
 
 .resume .base .profile {
@@ -472,6 +479,50 @@ h6 {
   background: var(--white);
   padding: 15px;
 }
+
+/* Compact skills grid (new) */
+
+.resume .func .skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  align-items: start;
+  padding: 10px 0 0 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.resume .func .skills-grid .skill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--off-white-2);
+  padding: 8px 10px;
+  border-radius: 8px;
+  transition: box-shadow .25s, transform .15s;
+  min-width: 0; /* allow flex children to shrink */
+  flex-wrap: wrap; /* allow pieces to wrap so no text is clipped */
+}
+.resume .func .skills-grid .skill:hover {
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+.skill .skill-info { flex: 1 1 auto; min-width: 0; overflow: visible; }
+.skill-name { font-weight: 700; font-size: 0.95rem; color: var(--black); white-space: normal; word-break: break-word; }
+.skill-meta { font-size: 0.75rem; color: var(--light-green); display: flex; gap: 8px; align-items: center; margin-top: 6px; flex-wrap: wrap; }
+.skill-tags { color: var(--light-green); white-space: normal; overflow: visible; text-overflow: unset; max-width: none; word-break: break-word; }
+.skill-years { color: var(--light-green); opacity: 0.9; }
+.skill-meter { width: 110px; max-width: 30%; min-width: 70px; height: 10px; background: var(--black); border-radius: 8px; overflow: hidden; flex: 0 0 auto; }
+.skill-fill { height: 100%; background: linear-gradient(90deg,var(--light-green),var(--brighter-green)); width: 0%; border-radius: 8px; transition: width 800ms cubic-bezier(.2,.8,.2,1); }
+.skill-percent { font-weight: 700; font-size: 0.85rem; color: var(--black); margin-left: 8px; flex: 0 0 40px; text-align: right; }
+.skills-note { display:block; margin-top:8px; color:var(--lighter-black); font-size:0.85rem; }
+
+/* Responsive: stack single column on small screens */
+@media (max-width: 720px) {
+  .resume { width: calc(100% - 20px); }
+  .resume .func .skills-grid { grid-template-columns: 1fr; }
+  .skill-meter { width: 90px; }
+}
+
 
 .resume .func .skills-prog ul {
   margin-left: 15px;
