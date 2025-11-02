@@ -39,6 +39,7 @@ async function generateResumePDF() {
     page1Container.id = 'pdf-page-1';
     page1Container.style.background = '#e6e6e6';
     page1Container.style.padding = '0px 0px 0px 380px'; // Minimal padding, keep left for .base
+    page1Container.style.margin = '0'; // Remove all margins
     page1Container.style.boxSizing = 'border-box';
     page1Container.style.display = 'flex';
     page1Container.style.justifyContent = 'flex-start'; // Align to start after padding
