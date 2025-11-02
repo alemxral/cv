@@ -38,14 +38,18 @@ async function generateResumePDF() {
     const page1Container = document.createElement('div');
     page1Container.id = 'pdf-page-1';
     page1Container.style.background = '#e6e6e6';
-    page1Container.style.padding = '20px';
+    page1Container.style.padding = '0px 0px 0px 380px'; // Minimal padding, keep left for .base
     page1Container.style.boxSizing = 'border-box';
+    page1Container.style.display = 'flex';
+    page1Container.style.justifyContent = 'flex-start'; // Align to start after padding
+    page1Container.style.alignItems = 'flex-start';
     
     // Clone the ENTIRE resume (includes both .base sidebar and .func content)
     const clonedResume = resumeElement.cloneNode(true);
-    clonedResume.style.margin = '20px auto';
+    clonedResume.style.margin = '0'; // Remove all margins
     clonedResume.style.boxShadow = '10px 10px #747D8C';
     clonedResume.style.display = 'flex'; // Ensure flex layout is preserved
+    clonedResume.style.position = 'relative'; // Make sure it's positioned correctly
     
     // Fix images in CV
     const imgs = clonedResume.querySelectorAll('img');
