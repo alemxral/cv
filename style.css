@@ -1026,6 +1026,27 @@ html, body {
 @media (max-width: 720px) {
   .project-list { grid-template-columns: 1fr; }
 }
+
+/* PDF export helpers: ensure exported pages are white and break per section */
+.pdf-export-container {
+  background: #ffffff;
+  color: #000000;
+  width: 210mm; /* A4 width */
+  box-sizing: border-box;
+  padding: 12mm;
+}
+.pdf-export-container .pdf-page {
+  page-break-after: always;
+  width: 100%;
+  box-sizing: border-box;
+}
+.pdf-export-container img { max-width: 100%; height: auto; }
+
+/* Hide particle layers when the export helper class is active on body (defensive) */
+body.pdf-export #particles-background,
+body.pdf-export #particles-foreground {
+  display: none !important;
+}
 .project-eye-link:hover .project-img::before {
   background: hsla(0, 0%, 0%, 0.5);
 }
