@@ -34,31 +34,37 @@ async function generateResumePDF() {
       return;
     }
 
-    // Create two separate containers - one per page
+    // Create a wrapper to center and fit content for PDF
+    const A4_WIDTH_PX = 794;  // 210mm at 96dpi
+    const A4_HEIGHT_PX = 1123; // 297mm at 96dpi
     const page1Container = document.createElement('div');
     page1Container.id = 'pdf-page-1';
-    page1Container.style.background = '#e6e6e6';
-    page1Container.style.padding = '20px 20px'; // Balanced top/bottom and left/right padding
-
+    page1Container.style.background = '#fff'; // Use white for visibility
+    page1Container.style.width = 'auto';      // Let content define width
+    page1Container.style.minWidth = '900px';  // Ensure enough space for sidebar
     page1Container.style.boxSizing = 'border-box';
     page1Container.style.display = 'flex';
-    page1Container.style.justifyContent = 'flex-start'; // Align to start after padding
+    page1Container.style.justifyContent = 'center';
     page1Container.style.alignItems = 'flex-start';
-    
-    // Clone the ENTIRE resume (includes both .base sidebar and .func content)
+    page1Container.style.margin = '0 auto';
+    page1Container.style.padding = '40px 40px';
+
+    // Clone the resume
     const clonedResume = resumeElement.cloneNode(true);
-    clonedResume.style.margin = '0'; // Remove all margins
+    clonedResume.style.margin = '0 auto';
     clonedResume.style.boxShadow = '10px 10px #747D8C';
-    clonedResume.style.display = 'flex'; // Ensure flex layout is preserved
-    clonedResume.style.position = 'relative'; // Make sure it's positioned correctly
-    
+    clonedResume.style.display = 'flex';
+    clonedResume.style.position = 'relative';
+    clonedResume.style.width = '100%';
+    clonedResume.style.maxWidth = '100%';
+
     // Fix images in CV
     const imgs = clonedResume.querySelectorAll('img');
     imgs.forEach(img => {
       img.style.maxWidth = '100%';
       img.style.height = 'auto';
     });
-    
+
     page1Container.appendChild(clonedResume);
 
     // Add page 1 to DOM temporarily to measure
@@ -68,13 +74,13 @@ async function generateResumePDF() {
     page1Container.style.zIndex = '99999';
     page1Container.style.visibility = 'hidden';
     document.body.appendChild(page1Container);
-    
+
     await new Promise(resolve => setTimeout(resolve, 200));
-    
+
     const page1Width = page1Container.offsetWidth;
     const page1Height = page1Container.offsetHeight;
     console.log(`Page 1 dimensions: ${page1Width}px × ${page1Height}px`);
-    
+
     page1Container.style.visibility = 'visible';
 
     // Generate PDF for page 1
@@ -241,21 +247,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // Remove the download attribute so it doesn't try to download the PDF file
     downloadBtn.removeAttribute('download');
     downloadBtn.removeAttribute('href');
-    
+
     downloadBtn.addEventListener('click', function(e) {
       e.preventDefault();
-      // Always switch to CV view before generating PDF
-      const navCV = document.getElementById('nav-cv');
-      if (navCV && navCV.querySelector('a')) {
-        navCV.querySelector('a').click();
-      }
-      // Wait for the view to update, then generate PDF
-      setTimeout(() => {
-        console.log('Download button clicked');
+      // Only switch to CV view if Projects is currently selected
+      const projectsSection = document.querySelector('.projects');
+      const resumeSection = document.querySelector('.resume');
+      // If projects is visible and resume is hidden, switch to CV view
+      if (projectsSection && resumeSection && projectsSection.style.display !== 'none' && resumeSection.style.display === 'none') {
+        const navCV = document.getElementById('nav-cv');
+        if (navCV && navCV.querySelector('a')) {
+          navCV.querySelector('a').click();
+        }
+        // Wait for the view to update, then generate PDF
+        setTimeout(() => {
+          console.log('Download button clicked (after switching to CV)');
+          generateResumePDF();
+        }, 500); // Increased delay for reliable rendering
+      } else {
+        // Already in CV view, just generate PDF
+        console.log('Download button clicked (CV view)');
         generateResumePDF();
-      }, 500); // Increased delay for reliable rendering
+      }
     });
-    
+
     console.log('PDF generator initialized');
   } else {
     console.warn('Download button not found');
