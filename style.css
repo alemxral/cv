@@ -52,6 +52,8 @@ body {
   margin: 0;
   padding: 0;
   transition: 0.5s;
+  overflow-x: auto;
+  min-width: 320px;
   background: black;
   cursor: default;
   font-family: "Montserrat", sans-serif;
@@ -878,6 +880,7 @@ html, body {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  background-color: #333;
 }
 
 
@@ -1049,4 +1052,61 @@ body.pdf-export #particles-foreground {
 }
 .project-eye-link:hover .project-img::before {
   background: hsla(0, 0%, 0%, 0.5);
+}
+
+/* On small screens, constrain resume width and allow horizontal scroll */
+@media (max-width: 900px) {
+  .resume {
+    min-width: 900px;
+     transform: scale(0.5);
+    transform-origin: top left;
+    width: 200%;
+    margin: 0 auto;
+    overflow-x: auto;
+   
+  }
+  body {
+     background-color: #333;
+  }
+}
+
+/* Stack contact links vertically on small screens */
+@media (max-width: 700px) {
+  .contact {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    padding: 0 8px;
+  }
+  .contact .email,
+  .contact .website-link {
+    display: block;
+    width: 100%;
+    margin-bottom: 4px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  .contact .email a,
+  .contact .website-link a {
+    font-size: 13px !important;
+    flex-direction: row;
+    align-items: center;
+    word-break: break-word;
+    flex-wrap: wrap;
+    display: flex;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    white-space: normal;
+  }
+  .contact .website-text {
+    word-break: break-word;
+    display: inline-block;
+    font-size: 12px;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
 }

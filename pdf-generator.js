@@ -38,8 +38,8 @@ async function generateResumePDF() {
     const page1Container = document.createElement('div');
     page1Container.id = 'pdf-page-1';
     page1Container.style.background = '#e6e6e6';
-    page1Container.style.padding = '0px 0px 0px 380px'; // Minimal padding, keep left for .base
-    page1Container.style.margin = '0'; // Remove all margins
+    page1Container.style.padding = '20px 20px'; // Balanced top/bottom and left/right padding
+
     page1Container.style.boxSizing = 'border-box';
     page1Container.style.display = 'flex';
     page1Container.style.justifyContent = 'flex-start'; // Align to start after padding
@@ -244,8 +244,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     downloadBtn.addEventListener('click', function(e) {
       e.preventDefault();
-      console.log('Download button clicked');
-      generateResumePDF();
+      // Always switch to CV view before generating PDF
+      const navCV = document.getElementById('nav-cv');
+      if (navCV && navCV.querySelector('a')) {
+        navCV.querySelector('a').click();
+      }
+      // Wait for the view to update, then generate PDF
+      setTimeout(() => {
+        console.log('Download button clicked');
+        generateResumePDF();
+      }, 500); // Increased delay for reliable rendering
     });
     
     console.log('PDF generator initialized');
